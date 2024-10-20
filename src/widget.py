@@ -11,3 +11,13 @@ def mask_account_card(account_card: str) -> str:
         result = " ".join(description_account_card[:-1]) + " " + result
 
     return result
+
+
+def get_date(date: str) -> str:
+    """Функция преобразует дату из формата '2024-03-11T02:26:18.671407' в формат 'ДД.ММ.ГГГГ'"""
+    date_old = date.split("T")
+    date_new = date_old[0].split("-")
+    date_old.clear()
+    date_old = date_new[::-1]
+    result = ".".join(date_old)
+    return result
