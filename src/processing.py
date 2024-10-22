@@ -1,5 +1,5 @@
 def filter_by_state(transaction: list[dict], state: str = "EXECUTED") -> list[dict]:
-    """Функция сортирует транзакции по состоянию"""
+    """Функция фильтрует транзакции по состоянию"""
     filtered_by_state = []
     for transact in transaction:
         if state in transact.values():
