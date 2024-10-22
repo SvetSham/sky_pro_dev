@@ -20,3 +20,6 @@ transactions = [
 ]
 print(processing.filter_by_state(transactions))
 print(processing.filter_by_state(transactions, "CANCELED"))
+
+print(processing.sort_by_date(transactions))
+print(processing.sort_by_date(transactions, False))
