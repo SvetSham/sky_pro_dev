@@ -1,6 +1,7 @@
+import masks
+
 def mask_account_card(account_card: str) -> str:
     """Функция возвращает маску для номера карты или счёта"""
-    import masks
 
     description_account_card = account_card.split()
     result = ""
