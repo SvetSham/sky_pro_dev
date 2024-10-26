@@ -3,8 +3,9 @@ from src.masks import get_mask_account, get_mask_card_number
 
 def mask_account_card(account_card: str) -> str:
     """Функция возвращает маску для номера карты или счёта"""
+    if len(account_card) == 0:
+        raise ValueError("Вы не ввели номер счёта / карты.")
     description_account_card = account_card.split()
-    print(description_account_card)
     result: str
     if description_account_card[0] == "Счет":
         if len(description_account_card) < 2:

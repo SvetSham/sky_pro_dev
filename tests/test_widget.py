@@ -48,6 +48,8 @@ def test_mask_account_card_default() -> None:
         mask_account_card("Visa Classic ")
     with pytest.raises(ValueError):
         mask_account_card("Счет ")
+    with pytest.raises(ValueError):
+        mask_account_card("")
 
 
 def test_get_date_normal() -> None:
