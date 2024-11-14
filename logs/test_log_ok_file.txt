@@ -1,0 +1,4 @@
+start: 1731614109.9770348
+my_function ok
+stop: 1731614109.9770377
+result = 3
