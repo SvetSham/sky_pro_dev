@@ -61,7 +61,7 @@ def test_log_ok_file(create_file_ok: str) -> None:
 
 def test_log_division_by_zer_file(create_file_err: str) -> None:
     @log(create_file_err)
-    def my_division(x: int, y:int) -> float:
+    def my_division(x: int, y: int) -> float:
         return x / y
 
     my_division(5, 0)
