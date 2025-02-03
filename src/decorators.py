@@ -4,7 +4,7 @@ from functools import wraps
 from typing import Any
 
 
-def log(filename: str="") -> Callable:
+def log(filename: str = "") -> Callable:
     """Декоратор регистрирует время вызова и останова функции, имя функции, передаваемые аргументы,
     результат выполнения и информацию об ошибках"""
 
