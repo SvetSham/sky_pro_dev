@@ -1,4 +1,0 @@
-start: 1738588616.9351268
-my_division error: division by zero. Inputs: (5, 0), {}
-stop: 1738588616.9351325
-result = None

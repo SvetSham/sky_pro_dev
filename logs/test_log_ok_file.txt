@@ -1,4 +1,0 @@
-start: 1738588616.9334548
-my_function ok
-stop: 1738588616.9334567
-result = 3
