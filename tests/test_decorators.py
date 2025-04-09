@@ -9,9 +9,9 @@ from src.decorators import log
 @pytest.fixture
 def create_file_ok() -> str:
     if os.path.basename(os.getcwd()) == "HomeWork_9.1":
-        filename = "logs/test_log_ok_file.txt"
+        filename = "logs/test_log_ok_file.log"
     else:
-        filename = "../logs/test_log_ok_file.txt"
+        filename = "../logs/test_log_ok_file.log"
     file = open(filename, "w", encoding="utf-8")
     file.close()
     return filename
@@ -20,9 +20,9 @@ def create_file_ok() -> str:
 @pytest.fixture
 def create_file_err() -> str:
     if os.path.basename(os.getcwd()) == "HomeWork_9.1":
-        filename = "logs/test_log_division_by_zer_file.txt"
+        filename = "logs/test_log_division_by_zer_file.log"
     else:
-        filename = "../logs/test_log_division_by_zer_file.txt"
+        filename = "../logs/test_log_division_by_zer_file.log"
     file = open(filename, "w", encoding="utf-8")
     file.close()
     return filename
