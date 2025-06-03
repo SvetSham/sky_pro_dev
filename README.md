@@ -492,6 +492,33 @@
 
 ```print(get_transaction_amount(transaction))```
 
+### Модуль read_csv_xlsx.py, функция read_transactions_csv
+Функция принимает на вход путь к csv-файлу с финансовыми транзакциями и считывает его в список словарей.
+Путь может быть указан как в виде строки, так и в виде объекта Path.
+По умолчанию файл с транзакциями лежит в папке data.
+Желательно использовать константу BASE_DIR, которая указывает на абсолютный путь к проекту,
+и лежит в модуле config.py, находящемуся в корне проекта.
+Пример использования функции read_transactions_csv:
+
+```from config import BASE_DIR```
+
+```transactions_list = read_transactions_csv(BASE_DIR / "data" / "transactions.csv")```
+
+```print(transactions_list)```
+
+### Модуль read_csv_xlsx.py, функция read_transactions_xlsx
+Функция принимает на вход путь к Excel-файлу с финансовыми транзакциями и считывает его в список словарей.
+Путь может быть указан как в виде строки, так и в виде объекта Path.
+По умолчанию файл с транзакциями лежит в папке data.
+Желательно использовать константу BASE_DIR, которая указывает на абсолютный путь к проекту,
+и лежит в модуле config.py, находящемуся в корне проекта.
+Пример использования функции read_transactions_xlsx:
+
+```from config import BASE_DIR```
+
+```transactions_list = read_transactions_xlsx(BASE_DIR / "data" / "transactions_excel.xlsx")```
+
+```print(transactions_list)```
 
 ## Тестирование
 Чтобы протестировать модуль ```src/masks.py```, необходимо запустить на выполнение модуль ```tests/test_masks.py```.
@@ -563,5 +590,13 @@
 
 - Функция ```test_get_transaction_amount_usd``` проверяет корректность работы функции ```get_transaction_amount```, если валюта указана не в рублях.
 - Функция ```test_get_transaction_amount_rub``` проверяет корректность работы функции ```get_transaction_amount```, если валюта указана в рублях.
+
+
+Чтобы протестировать модуль src/read_csv_xlsx.py, необходимо запустить на выполнение
+модуль ```tests/test_read_csv_xlsx.py```
+
+- Функция ```test_read_transactions_csv``` проверяет корректность работы функции ```read_transactions_csv```, открывается ли файл с данными в формате csv и преобразуется ли он в список словарей.
+- Функция ```test_read_transactions_xlsx``` проверяет корректность работы функции ```read_transactions_xlsx```, открывается ли файл с данными в формате xlsx и преобразуется ли он в список словарей.
+
 
 Все необходимые наборы данных зафиксированы в соответствующих фикстурах.
