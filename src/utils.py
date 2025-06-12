@@ -1,6 +1,8 @@
 import json
 import logging
 import os
+import re
+from collections import Counter
 
 if os.path.basename(os.getcwd()) == "HomeWork_9.1":
     filename = "logs/utils.log"
@@ -45,3 +47,21 @@ def read_json_file(path_to_file: str) -> list:
         else:
             logger.error("Получен не список")
             return []
+
+
+def process_bank_search(data: list[dict], str_for_search: str) -> list[dict]:
+    found_data = []
+    for transaction in data:
+        if re.search(str_for_search, transaction["description"], flags=re.IGNORECASE):
+            found_data.append(transaction)
+    return found_data
+
+
+def process_bank_operations(data: list[dict], categories: list) -> dict:
+    num_operations_in_categories = {}
+    operations_in_categories = []
+    for transaction in data:
+        operations_in_categories.append(transaction["description"])
+    num_operations_in_categories = Counter(operations_in_categories)
+
+    return dict(num_operations_in_categories)
