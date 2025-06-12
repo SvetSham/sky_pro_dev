@@ -16,7 +16,7 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
-def read_json_file(path_to_file: str) -> list:
+def read_json_file(path_to_file: str) -> list[dict]:
     """Функция принимает на вход путь до JSON-файла и возвращает список словарей
     с данными о финансовых транзакциях. Если файл пустой, содержит не список или не найден,
     функция возвращает пустой список."""
