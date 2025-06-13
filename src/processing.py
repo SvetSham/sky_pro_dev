@@ -21,6 +21,8 @@ def process_bank_search(data: list[dict], str_for_search: str) -> list[dict]:
     """Функция принимает список словарей с данными о банковских операциях и строку поиска,
     и возвращает список словарей, у которых в описании есть данная строка."""
     found_data = []
+    if len(str_for_search) == 0:
+        return []
     for transaction in data:
         if re.search(str_for_search, transaction["description"], flags=re.IGNORECASE):
             found_data.append(transaction)
@@ -34,6 +36,7 @@ def process_bank_operations(data: list[dict], categories: list) -> dict:
     """
     operations_in_categories = []
     for transaction in data:
-        operations_in_categories.append(transaction["description"])
+        if transaction["description"] in categories:
+            operations_in_categories.append(transaction["description"])
     num_operations_in_categories = Counter(operations_in_categories)
     return dict(num_operations_in_categories)
