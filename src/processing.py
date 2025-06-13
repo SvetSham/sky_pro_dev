@@ -1,6 +1,7 @@
 import re
 from collections import Counter
 
+
 def filter_by_state(transaction: list[dict], state: str = "EXECUTED") -> list[dict]:
     """Функция фильтрует транзакции по состоянию"""
     filtered_by_state = []
@@ -28,7 +29,9 @@ def process_bank_search(data: list[dict], str_for_search: str) -> list[dict]:
 
 def process_bank_operations(data: list[dict], categories: list) -> dict:
     """Функция принимает список словарей с данными о банковских операциях и список категорий операций,
-    и возвращает словарь, в котором ключи — это названия категорий, а значения — это количество операций в каждой категории."""
+    и возвращает словарь, в котором ключи — это названия категорий,
+    а значения — это количество операций в каждой категории.
+    """
     operations_in_categories = []
     for transaction in data:
         operations_in_categories.append(transaction["description"])

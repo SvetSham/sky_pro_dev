@@ -14,9 +14,9 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
-def get_mask_card_number(card_number: str = '-1') -> str:
+def get_mask_card_number(card_number: str = "-1") -> str:
     """Функция маскировки номера банковской карты"""
-    if card_number == '-1':
+    if card_number == "-1":
         logger.error("Номер карты не введён")
         raise ValueError("Вы не ввели номер карты.")
     if not card_number.isdigit():
@@ -44,20 +44,20 @@ def get_mask_card_number(card_number: str = '-1') -> str:
     return mask_card_number
 
 
-def get_mask_account(account_number: str = '-1') -> str:
+def get_mask_account(account_number: str = "-1") -> str:
     """Функция маскировки номера банковского счета"""
-    if account_number == '-1':
-        logger.error('Номер счёта не введён')
+    if account_number == "-1":
+        logger.error("Номер счёта не введён")
         raise ValueError("Вы не ввели номер счёта.")
     if not account_number.isdigit():
-        logger.error('Номер счёта - не число')
+        logger.error("Номер счёта - не число")
         raise ValueError("Номер счёта должен содержать только цифры.")
     if len(account_number) < 20:
-        logger.error('Номер счёта короче 20 цифр')
+        logger.error("Номер счёта короче 20 цифр")
         raise ValueError("Номер счёта слишком короткий. Должно быть 20 цифр.")
     elif len(account_number) > 20:
-        logger.error('Номер счёта длиннее 20 цифр')
+        logger.error("Номер счёта длиннее 20 цифр")
         raise ValueError("Номер счёта слишком длинный. Должно быть 20 цифр.")
     mask_account = "**" + account_number[-4:]
-    logger.info('Номер счёта замаскирован')
+    logger.info("Номер счёта замаскирован")
     return mask_account
