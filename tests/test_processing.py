@@ -1,6 +1,6 @@
 import pytest
 
-from src.processing import filter_by_state, sort_by_date
+from src.processing import filter_by_state, sort_by_date, process_bank_search, process_bank_operations
 
 
 @pytest.fixture
@@ -88,16 +88,41 @@ def sorted_operations_reverse() -> list[dict]:
     return sorted_reverse
 
 
-"""@pytest.mark.parametrize("operation, state, result", [('operations', None, 'executed_operations'),
-                                                      ('operations', "EXECUTED", 'executed_operations'),
-                                                      ('operations', "CANCELED", 'canceled_operations')
-                                                      ])
-def test_filter_by_state_normal(operation: list[dict], state: str, result: list[dict], request) -> None:
-    assert filter_by_state(request.getfixturevalue(operation), state) == request.getfixturevalue(result)"""
+@pytest.fixture
+def transactions_data() -> list[dict]:
+    transactions = [
+        {
+            "id": 615064591,
+            "state": "CANCELED",
+            "date": "2018-10-14T08:21:33.419441",
+            "operationAmount": {"amount": "77751.04", "currency": {"name": "руб.", "code": "RUB"}},
+            "description": "Перевод с карты на счет",
+            "from": "Maestro 3928549031574026",
+            "to": "Счет 84163357546688983493",
+        },
+        {
+            "id": 863064926,
+            "state": "EXECUTED",
+            "date": "2019-12-08T22:46:21.935582",
+            "operationAmount": {"amount": "41096.24", "currency": {"name": "USD", "code": "USD"}},
+            "description": "Открытие вклада",
+            "to": "Счет 90424923579946435907",
+        },
+        {
+            "id": 594226727,
+            "state": "CANCELED",
+            "date": "2018-09-12T21:27:25.241689",
+            "operationAmount": {"amount": "67314.70", "currency": {"name": "руб.", "code": "RUB"}},
+            "description": "Перевод организации",
+            "from": "Visa Platinum 1246377376343588",
+            "to": "Счет 14211924144426031657",
+        },
+    ]
+    return transactions
 
 
 def test_filter_by_state_normal(
-    operations: list[dict], executed_operations: list[dict], canceled_operations: list[dict]
+        operations: list[dict], executed_operations: list[dict], canceled_operations: list[dict]
 ) -> None:
     assert filter_by_state(operations) == executed_operations
     assert filter_by_state(operations, "EXECUTED") == executed_operations
@@ -111,7 +136,7 @@ def test_filter_by_state_not_found(executed_operations: list[dict], canceled_ope
 
 
 def test_sort_by_date_normal(
-    operations: list[dict], sorted_operations_direct: list[dict], sorted_operations_reverse: list[dict]
+        operations: list[dict], sorted_operations_direct: list[dict], sorted_operations_reverse: list[dict]
 ) -> None:
     assert sort_by_date(operations) == sorted_operations_direct
     assert sort_by_date(operations, True) == sorted_operations_direct
@@ -119,10 +144,50 @@ def test_sort_by_date_normal(
 
 
 def test_sort_by_date_same_date(
-    operations_same_date: list[dict],
-    operations_same_date_sorted_direct: list[dict],
-    operations_same_date_sorted_reverse: list[dict],
+        operations_same_date: list[dict],
+        operations_same_date_sorted_direct: list[dict],
+        operations_same_date_sorted_reverse: list[dict],
 ) -> None:
     assert sort_by_date(operations_same_date) == operations_same_date_sorted_direct
     assert sort_by_date(operations_same_date, True) == operations_same_date_sorted_direct
     assert sort_by_date(operations_same_date, False) == operations_same_date_sorted_reverse
+
+
+def test_process_bank_search(transactions_data: list[dict]) -> None:
+    assert process_bank_search(transactions_data, "Перевод") == [
+        {
+            "id": 615064591,
+            "state": "CANCELED",
+            "date": "2018-10-14T08:21:33.419441",
+            "operationAmount": {"amount": "77751.04", "currency": {"name": "руб.", "code": "RUB"}},
+            "description": "Перевод с карты на счет",
+            "from": "Maestro 3928549031574026",
+            "to": "Счет 84163357546688983493",
+        },
+        {
+            "id": 594226727,
+            "state": "CANCELED",
+            "date": "2018-09-12T21:27:25.241689",
+            "operationAmount": {"amount": "67314.70", "currency": {"name": "руб.", "code": "RUB"}},
+            "description": "Перевод организации",
+            "from": "Visa Platinum 1246377376343588",
+            "to": "Счет 14211924144426031657",
+        },
+    ]
+    assert process_bank_search(transactions_data, "Открытие") == [{
+        "id": 863064926,
+        "state": "EXECUTED",
+        "date": "2019-12-08T22:46:21.935582",
+        "operationAmount": {"amount": "41096.24", "currency": {"name": "USD", "code": "USD"}},
+        "description": "Открытие вклада",
+        "to": "Счет 90424923579946435907",
+    }]
+    assert process_bank_search(transactions_data, "hello") == []
+    assert process_bank_search(transactions_data, "") == []
+
+
+def test_process_bank_operations(transactions_data: list[dict]) -> None:
+    my_categories = ["Открытие вклада", "Перевод организации", "Перевод с карты на счет"]
+    result = {'Перевод с карты на счет': 1, 'Открытие вклада': 1, 'Перевод организации': 1}
+    assert process_bank_operations(transactions_data, my_categories) == result
+    assert process_bank_operations(transactions_data, []) == {}
