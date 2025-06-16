@@ -1,10 +1,10 @@
 from math import isnan
 
 from config import PATH_DATA
-from src.generators import filter_by_currency
-from src.processing import filter_by_state, process_bank_search, sort_by_date
-from src.read_csv_xlsx import read_transactions_csv, read_transactions_xlsx
-from src.utils import read_json_file
+import src.generators
+import src.processing
+import src.read_csv_xlsx
+import src.utils
 from src.widget import get_date, mask_account_card
 
 
@@ -16,27 +16,25 @@ def welcome_1() -> tuple:
 с банковскими транзакциями.""")
     norm_user_choice_file = False
     while not norm_user_choice_file:
-        user_file_choice = int(
-            input(
-                ("""Выберите необходимый пункт меню:
+        user_file_choice = int(input("""Выберите необходимый пункт меню:
     1. Получить информацию о транзакциях из JSON-файла
     2. Получить информацию о транзакциях из CSV-файла
     3. Получить информацию о транзакциях из XLSX-файла
-""")))
+"""))
         if user_file_choice == 1:
             norm_user_choice_file = True
             print("Для обработки выбран JSON-файл")
-            transaction_data = read_json_file(PATH_DATA / "operations.json")
+            transaction_data = src.utils.read_json_file(PATH_DATA / "operations.json")
         elif user_file_choice == 2:
             norm_user_choice_file = True
             print("Для обработки выбран CSV-файл")
-            transaction_data = read_transactions_csv(PATH_DATA / "transactions.csv")
+            transaction_data = src.read_csv_xlsx.read_transactions_csv(PATH_DATA / "transactions.csv")
         elif user_file_choice == 3:
             norm_user_choice_file = True
             print("Для обработки выбран XLSX-файл")
-            transaction_data = read_transactions_xlsx(PATH_DATA / "transactions_excel.xlsx")
+            transaction_data = src.read_csv_xlsx.read_transactions_xlsx(PATH_DATA / "transactions_excel.xlsx")
         else:
-            print("Такого варианта нет. Попробуйте ещё раз.")
+            print("Такого варианта нет. Попробуйте ещё раз. Введите 1, 2 или 3.")
         return transaction_data, user_file_choice
 
 
@@ -51,15 +49,15 @@ def welcome_2(transaction_data: list[dict]) -> list[dict]:
         if user_status_choice.upper() == "EXECUTED":
             norm_user_choice_status = True
             print("Операции отфильтрованы по статусу 'EXECUTED'")
-            filtered_data_by_state = filter_by_state(transaction_data, "EXECUTED")
+            filtered_data_by_state = src.processing.filter_by_state(transaction_data, "EXECUTED")
         elif user_status_choice.upper() == "CANCELED":
             norm_user_choice_status = True
             print("Операции отфильтрованы по статусу 'CANCELED'")
-            filtered_data_by_state = filter_by_state(transaction_data, "CANCELED")
+            filtered_data_by_state = src.processing.filter_by_state(transaction_data, "CANCELED")
         elif user_status_choice.upper() == "PENDING":
             norm_user_choice_status = True
             print("Операции отфильтрованы по статусу 'PENDING'")
-            filtered_data_by_state = filter_by_state(transaction_data, "PENDING")
+            filtered_data_by_state = src.processing.filter_by_state(transaction_data, "PENDING")
         else:
             print(f'Статус операции "{user_status_choice}" недоступен.')
     return filtered_data_by_state
@@ -80,10 +78,10 @@ def sort_data(filtered_data: list[dict]) -> list[dict]:
                 date_sort_order = input("Отсортировать по возрастанию или по убыванию?\n").lower()
                 if date_sort_order == "по возрастанию":
                     norm_user_choice_order = True
-                    selection = sort_by_date(filtered_data, False)
+                    selection = src.processing.sort_by_date(filtered_data, False)
                 elif date_sort_order == "по убыванию":
                     norm_user_choice_order = True
-                    selection = sort_by_date(filtered_data, True)
+                    selection = src.processing.sort_by_date(filtered_data, True)
                 else:
                     print("Такого варианта нет. Введите: 'по возрастанию' или 'по убыванию'\n")
         elif date_sort_flag == "нет":
@@ -102,7 +100,7 @@ def rubble_transactions(selection: list[dict]) -> list[dict]:
         rub_transactions = input("Выводить только рублевые транзакции? Да/Нет\n").lower()
         if rub_transactions == "да":
             norm_user_choice = True
-            selection = list(filter_by_currency(selection, "RUB"))
+            selection = list(src.generators.filter_by_currency(selection, "RUB"))
         elif rub_transactions == "нет":
             norm_user_choice = True
         else:
@@ -120,7 +118,7 @@ def filter_word(selection: list[dict]) -> list[dict]:
         if filter_by_word == "да":
             norm_user_choice = True
             word = input("Введите слово для поиска\n")
-            selection = process_bank_search(selection, word)
+            selection = src.processing.process_bank_search(selection, word)
         elif filter_by_word == "нет":
             norm_user_choice = True
         else:
@@ -156,9 +154,10 @@ def display_result(selection: list[dict], num_of_file: int) -> None:
         print("Не найдено ни одной транзакции, подходящей под ваши условия фильтрации")
 
 
-transactions_data, file_number = welcome_1()
-filtered_transactions_data = welcome_2(transactions_data)
-sorted_data = sort_data(filtered_transactions_data)
-currency_filter = rubble_transactions(sorted_data)
-word_filter = filter_word(currency_filter)
-display_result(word_filter, file_number)
+if __name__ == "__main__":
+    transactions_data, file_number = welcome_1()
+    filtered_transactions_data = welcome_2(transactions_data)
+    sorted_data = sort_data(filtered_transactions_data)
+    currency_filter = rubble_transactions(sorted_data)
+    word_filter = filter_word(currency_filter)
+    display_result(word_filter, file_number)
