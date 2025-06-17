@@ -16,20 +16,20 @@ def welcome_1() -> tuple:
 с банковскими транзакциями.""")
     norm_user_choice_file = False
     while not norm_user_choice_file:
-        user_file_choice = int(input("""Выберите необходимый пункт меню:
+        user_file_choice = input("""Выберите необходимый пункт меню:
     1. Получить информацию о транзакциях из JSON-файла
     2. Получить информацию о транзакциях из CSV-файла
     3. Получить информацию о транзакциях из XLSX-файла
-"""))
-        if user_file_choice == 1:
+""")
+        if user_file_choice == '1':
             norm_user_choice_file = True
             print("Для обработки выбран JSON-файл")
             transaction_data = src.utils.read_json_file(PATH_DATA / "operations.json")
-        elif user_file_choice == 2:
+        elif user_file_choice == '2':
             norm_user_choice_file = True
             print("Для обработки выбран CSV-файл")
             transaction_data = src.read_csv_xlsx.read_transactions_csv(PATH_DATA / "transactions.csv")
-        elif user_file_choice == 3:
+        elif user_file_choice == '3':
             norm_user_choice_file = True
             print("Для обработки выбран XLSX-файл")
             transaction_data = src.read_csv_xlsx.read_transactions_xlsx(PATH_DATA / "transactions_excel.xlsx")
@@ -160,4 +160,4 @@ if __name__ == "__main__":
     sorted_data = sort_data(filtered_transactions_data)
     currency_filter = rubble_transactions(sorted_data)
     word_filter = filter_word(currency_filter)
-    display_result(word_filter, file_number)
+    display_result(word_filter, int(file_number))
