@@ -69,9 +69,7 @@ def transactions_list() -> list[dict]:
 
 @patch("pandas.read_csv")
 def test_read_transactions_csv(
-        mock_csv: unittest.mock.MagicMock,
-        transactions_df: pd.DataFrame,
-        transactions_list: list[dict]
+    mock_csv: unittest.mock.MagicMock, transactions_df: pd.DataFrame, transactions_list: list[dict]
 ) -> None:
     mock_csv.return_value = transactions_df
     path_to_csv_file = PATH_DATA / "transactions.csv"
@@ -82,9 +80,7 @@ def test_read_transactions_csv(
 
 @patch("pandas.read_excel")
 def test_read_transactions_xlsx(
-        mock_xlsx: unittest.mock.MagicMock,
-        transactions_df: pd.DataFrame,
-        transactions_list: list[dict]
+    mock_xlsx: unittest.mock.MagicMock, transactions_df: pd.DataFrame, transactions_list: list[dict]
 ) -> None:
     mock_xlsx.return_value = transactions_df
     path_to_xlsx_file = PATH_DATA / "transactions_excel.xlsx"

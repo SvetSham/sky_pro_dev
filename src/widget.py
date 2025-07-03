@@ -10,20 +10,20 @@ def mask_account_card(account_card: str) -> str:
     if description_account_card[0] == "Счет":
         if len(description_account_card) < 2:
             raise ValueError("Вы не ввели номер счёта.")
-        account_number: int
+        account_number: str
         try:
-            account_number = int(description_account_card[1])
+            account_number = description_account_card[1]
         except ValueError:
             raise ValueError("Номер счёта должен содержать только цифры.")
         result = description_account_card[0] + " " + get_mask_account(account_number)
     else:
         if len(description_account_card) < 2:
             raise ValueError("Вы не ввели номер карты.")
-        if description_account_card[-1].isalpha():
+        if not description_account_card[-1].isdigit():
             raise ValueError("Вы не ввели номер карты.")
-        card_number: int
+        card_number: str
         try:
-            card_number = int(description_account_card[-1])
+            card_number = description_account_card[-1]
         except ValueError:
             raise ValueError("Номер карты должен содержать только цифры.")
         result = get_mask_card_number(card_number)

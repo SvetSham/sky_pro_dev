@@ -4,6 +4,9 @@ def filter_by_currency(transactions: list[dict], currency: str):
         if "operationAmount" in transaction.keys():
             if transaction["operationAmount"]["currency"]["code"] == currency:
                 yield transaction
+        elif "currency_code" in transaction.keys():
+            if transaction["currency_code"] == currency:
+                yield transaction
 
 
 def transaction_descriptions(transactions: list[dict]):

@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+from pathlib import Path
 
 if os.path.basename(os.getcwd()) == "HomeWork_9.1":
     filename = "logs/utils.log"
@@ -15,7 +16,7 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
-def read_json_file(path_to_file: str) -> list:
+def read_json_file(path_to_file: str | Path) -> list[dict]:
     """Функция принимает на вход путь до JSON-файла и возвращает список словарей
     с данными о финансовых транзакциях. Если файл пустой, содержит не список или не найден,
     функция возвращает пустой список."""
